@@ -1,0 +1,13 @@
+{
+    "name": "Blogs",
+    "alias": "blogs",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "eightworx\\Blogs\\Providers\\BlogsServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
