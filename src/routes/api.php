@@ -17,13 +17,15 @@ use eightworx\Blogs\Http\Controllers\Api\V1\Front\BlogsController as FrontBlogsC
 Route::group(['prefix' => 'v1'], function () {
     Route::group(['middleware' => ['localization']], function () {
         Route::group(['prefix' => 'blogs'], function () {
-            Route::group(['middleware' => ['auth:sanctum','role:user_roles_admin']], function () {
+            Route::group(['middleware' => ['auth:sanctum', 'role:user_roles_admin']], function () {
                 Route::get('blog', [BlogsController::class, 'index'])->middleware('limitedLength:50');
                 Route::resource('blog', BlogsController::class)->except(['index']);
                 Route::post('autocomplete', [BlogsController::class, 'autocomplete'])->middleware('limitedLength:50');
             });
-            Route::group(['prefix' => 'front'], function () {
-                Route::post('/', [FrontBlogsController::class, 'index'])->middleware('limitedLength:50');
+        });
+        Route::group(['prefix' => 'front'], function () {
+            Route::group(['prefix' => 'blogs'], function () {
+                Route::post('/index', [FrontBlogsController::class, 'index'])->middleware('limitedLength:50');
                 Route::get('show', [FrontBlogsController::class, 'show']);
                 Route::post('paginated-blogs', [FrontBlogsController::class, 'paginatedBlogs'])->middleware('limitedLength:50');
             });

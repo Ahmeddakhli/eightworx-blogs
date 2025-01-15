@@ -19,12 +19,19 @@ class StoreBlogAction
             $optimizerChain = OptimizerChainFactory::create(); // Reuse optimizer chain instance
             foreach ($data['featured_images'] as $featured_image) {
                 $mediaItem = $blog->addMedia($featured_image)->toMediaCollection('Blogs.featured_images');
-                
+
                 // Optimize the uploaded media
                 $optimizerChain->optimize($mediaItem->getPath());
             }
         }
+        if (isset($data['og_image'])) {
+            // Add the image to media collection
+            $mediaItem = $blog->addMediaFromRequest('og_image')->toMediaCollection('Blogs.og_image');
 
+            // Optimize the image
+            $optimizerChain = OptimizerChainFactory::create();
+            $optimizerChain->optimize($mediaItem->getPath());
+        }
         // Handle media files if provided
         if (isset($data['media_data']) && $data['media_type']) {
             $this->storeMedia($blog, $data['media_data'], $data['media_type']);
@@ -47,13 +54,13 @@ class StoreBlogAction
                     throw new Exception('Expected an uploaded file for video.');
                 }
                 break;
-    
+
             case 'url':
             case 'iframe':
                 $blog->media_data = $media;
                 $blog->save();
                 break;
-    
+
             default:
                 throw new Exception('Unsupported media type: ' . $mediaType);
         }

@@ -8,22 +8,24 @@ class DeleteBlogAction
 {
     public function execute($id)
     {
-       // Delete the Blog
-       $blog = Blog::where('id', $id)->first();
+        // Delete the Blog
+        $blog = Blog::where('id', $id)->first();
 
-       // Not Found!
-       if (!isset($blog)) {
-           return null;
-       }
+        // Not Found!
+        if (!isset($blog)) {
+            return null;
+        }
 
-       // Clear the media collection for the slider
-       if ($blog->hasMedia('Blogs.featured_images')) {
-           $blog->clearMediaCollection('Blogs.featured_images');
-       }
+        // Clear the media collection for the slider
+        if ($blog->hasMedia('Blogs.featured_images')) {
+            $blog->clearMediaCollection('Blogs.featured_images');
+        }
+        if ($blog->hasMedia('Blogs.og_image')) {
+            $blog->clearMediaCollection('Blogs.og_image');
+        }
+        // Delete
+        $blog->delete();
 
-       // Delete
-       $blog->delete();
-
-       return true;
+        return true;
     }
 }

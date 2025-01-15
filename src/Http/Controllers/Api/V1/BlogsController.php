@@ -43,8 +43,7 @@ class BlogsController extends Controller
         UpdateBlogAction  $updateBlogAction,
         DeleteBlogAction  $deleteBlogAction,
         AutoCompleteAction $autoCompleteAction
-    )
-    {
+    ) {
         $this->getBlogsAction = $getBlogsAction;
         $this->getBlogByIdAction = $getBlogByIdAction;
         $this->storeBlogAction = $storeBlogAction;
@@ -57,7 +56,6 @@ class BlogsController extends Controller
     {
         // Execute the search action to retrieve blogs based on the provided request.
         $blogs = $this->getBlogsAction->execute($request);
-
         // use this to return trans object
         $data = DataTables::of($blogs)
             ->addColumn('record', function ($blogs) {
@@ -130,8 +128,8 @@ class BlogsController extends Controller
         // Get the blog by ID
         $blog = $this->getBlogByIdAction->execute($id);
 
-         // Not Found
-         if (!$blog) {
+        // Not Found
+        if (!$blog) {
             return $this->errorResponse(__('blogs.not_found'), null, 404);
         }
 
