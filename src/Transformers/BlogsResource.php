@@ -35,6 +35,13 @@ class BlogsResource extends JsonResource
             'meta_title_ar' => $this->meta_title_ar,
             'meta_description_en' => $this->meta_description_en,
             'meta_description_ar' => $this->meta_description_ar,
+            'meta_keywords_en' => $this->meta_keywords_en,
+            'meta_keywords_ar' => $this->meta_keywords_ar,
+            'og_title_ar' => $this->og_title_ar,
+            'og_title_en' => $this->og_title_en,
+            'og_description_ar' => $this->og_description_ar,
+            'og_description_en' => $this->og_description_en,
+            'og_image' => $this->getFirstMediaUrl('Blogs.og_image'),
             'is_index' => $this->is_index,
             'category_id' => optional($this->category)->id,
             'featured_images' => $this->getMedia('Blogs.featured_images')->map(function ($media) {
