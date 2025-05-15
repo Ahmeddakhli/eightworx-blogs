@@ -50,6 +50,13 @@ class BlogsController extends Controller
         $this->updateBlogAction = $updateBlogAction;
         $this->deleteBlogAction = $deleteBlogAction;
         $this->autoCompleteAction = $autoCompleteAction;
+
+        // Apply permission
+        $this->middleware('check-permission:blogs-index')->only('index');
+        $this->middleware('check-permission:blogs-store')->only('store');
+        $this->middleware('check-permission:blogs-update')->only('update');
+        $this->middleware('check-permission:blogs-destroy')->only('destroy');
+        $this->middleware('check-permission:blogs-show')->only('f');
     }
 
     public function index(Request $request)

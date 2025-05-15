@@ -8,6 +8,7 @@ use eightworx\Blogs\Http\Controllers\Actions\Blog\GetBlogsAction;
 use eightworx\Blogs\Transformers\BlogsResource;
 use eightworx\Blogs\Http\Controllers\Actions\Blog\GetBlogBySlugAction;
 use eightworx\Blogs\Http\Controllers\Actions\Blog\GetBlogByIdAction;
+use eightworx\Blogs\Http\Controllers\Actions\Blog\GetFeaturedBlogsAction;
 use eightworx\Blogs\Transformers\BlogCardResource;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -16,7 +17,7 @@ class BlogsController extends Controller
     // Define actions as private properties
     private GetBlogsAction $getBlogsAction;
     private GetBlogBySlugAction $getBlogBySlugAction;
-
+    private GetFeaturedBlogsAction $getFeaturedBlogsAction;
     private GetBlogByIdAction $getBlogByIdAction;
 
     /**
@@ -28,10 +29,12 @@ class BlogsController extends Controller
         GetBlogsAction  $getBlogsAction,
         GetBlogBySlugAction $getBlogBySlugAction,
         GetBlogByIdAction $getBlogByIdAction,
+        GetFeaturedBlogsAction $getFeaturedBlogsAction,
     ) {
         $this->getBlogsAction = $getBlogsAction;
         $this->getBlogBySlugAction = $getBlogBySlugAction;
         $this->getBlogByIdAction = $getBlogByIdAction;
+        $this->getFeaturedBlogsAction = $getFeaturedBlogsAction;
     }
 
     public function index(Request $request)
@@ -86,4 +89,18 @@ class BlogsController extends Controller
     //     // Return the response
     //     return $this->successResponse(null, $blog);
     // }
+
+    public function featuredBlogs()
+    {
+        // Get It
+        $featuredBlogs = $this->getFeaturedBlogsAction->execute();
+
+        // Not Found
+        if (!$featuredBlogs) {
+            return $this->errorResponse(__('main.not_found'));
+        }
+
+        // Response
+        return $this->successResponse(null, $featuredBlogs);
+    }
 }
