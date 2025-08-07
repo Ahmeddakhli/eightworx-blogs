@@ -3,55 +3,18 @@
 namespace eightworx\Blogs\Http\Controllers\Actions\Blog;
 
 use eightworx\Blogs\Models\Blog;
+use Modules\Lookups\Http\Controllers\Actions\Lookup\LookupsHelperByParentSlugAction;
 
 class BlogsHelperAction
 {
     public function execute($request)
     {
-        // // Init Data
-        // $data = null;
+       // Instantiate the action class
+       $lookupHelper = new LookupsHelperByParentSlugAction();
 
-        // // Check if the request has 'form_name' parameter
-        // if ($request->form_name) {
-        //     switch ($request->form_name) {
-        //         case 'store':
-        //             $data = $this->store();
-        //             break;
-        //         case 'update':
-        //             $data = $this->update($request);
-        //             break;
-        //         default:
-        //             $data = null;
-        //             break;
-        //     }
-        // }
+       // Call the method to fetch lookups
+       $data = $lookupHelper->execute(['blog-categories']);
 
-        // // Return
-        // return $data;
-
-        $blogs = Blog::select('title_en as label', 'id as value')->get();
-
-        // Return
-        return $blogs;
+       return $data;
     }
-
-    // private function store()
-    // {
-    //     $blogs = Blog::select('title_en as label', 'id as value')->get();
-
-    //     // Return
-    //     return [
-    //         $blogs
-    //     ];
-    // }
-
-    // private function update($request)
-    // {
-    //     $blogs = Blog::select('title_en as label', 'id as value')->where('id', '!=', $request->input('id'))->get();
-
-    //     // Return
-    //     return [
-    //         $blogs
-    //     ];
-    // }
 }
