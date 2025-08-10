@@ -50,38 +50,27 @@ class StoreBlogsRequest extends FormRequest
             'featured_images.*' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
         ];
 
-        // Additional rules for video and article types
+        // Additional rules for post_type = video or article
         if ($this->post_type === 'video') {
-            // For video, media_data must be a file (video)
-            $rules['media_data'] = 'required|file|mimetypes:video/mp4,video/x-m4v,video/*';
+            if ($this->media_type === 'file') {
+                $rules['media_data'] = 'required|file|mimetypes:video/mp4,video/x-m4v,video/*';
+            } elseif ($this->media_type === 'url') {
+                $rules['media_data'] = 'required|url';
+            } elseif ($this->media_type === 'iframe') {
+                $rules['media_data'] = 'required|string'; // or more specific iframe regex if needed
+            }
         } elseif ($this->post_type === 'article') {
-            // For article, media_data must be a string (URL or iframe)
             $rules['media_data'] = 'required|string';
-        }
+        }     
 
         return $rules;
     }
 
     /**
-     * Add conditional validation for `media_data` and `media_type` fields based on post_type.
+     * Add conditional validation for media_data and media_type fields based on post_type.
      */
     public function withValidator($validator)
     {
-        // For 'video' post type, 'media_data' must be a file
-        $validator->sometimes('media_data', 'required|file|mimetypes:video/mp4,video/x-m4v,video/*', function ($input) {
-            return $input->post_type === 'video';
-        });
-
-        // For 'article' post type and 'media_type' of 'url', 'media_data' should be a URL string
-        $validator->sometimes('media_data', 'required|string|url', function ($input) {
-            return $input->post_type === 'article' && $input->media_type === 'url';
-        });
-
-        // For 'article' post type and 'media_type' of 'iframe', 'media_data' should be a string
-        $validator->sometimes('media_data', 'required|string', function ($input) {
-            return $input->post_type === 'article' && $input->media_type === 'iframe';
-        });
-
         // For 'gallery' post type, 'featured_images' must be an array
         $validator->sometimes('featured_images', 'required|array', function ($input) {
             return $input->post_type === 'gallery';

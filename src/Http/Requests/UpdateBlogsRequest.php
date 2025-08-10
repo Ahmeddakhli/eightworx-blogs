@@ -54,26 +54,27 @@ class UpdateBlogsRequest extends FormRequest
             'featured_images.*' => $this->imageOrUrlRule('featured_images'),
         ];
 
+        //  Conditional rules for media_data based on post_type and media_type
+        if ($this->post_type === 'video') {
+            if ($this->media_type === 'video') {
+                $rules['media_data'] = 'required|file|mimetypes:video/mp4,video/x-m4v,video/*';
+            } elseif ($this->media_type === 'url') {
+                $rules['media_data'] = 'required|url';
+            } elseif ($this->media_type === 'iframe') {
+                $rules['media_data'] = 'required|string';
+            }
+        } elseif ($this->post_type === 'article') {
+            $rules['media_data'] = 'required|string';
+        }
+
         return $rules;
     }
 
     /**
-     * Add conditional validation for `media_data` and other fields based on `post_type`.
+     * Add conditional validation for media_data and other fields based on post_type.
      */
     public function withValidator($validator)
     {
-        $validator->sometimes('media_data', 'required|file|mimetypes:video/mp4,video/x-m4v,video/*', function ($input) {
-            return $input->post_type === 'video';
-        });
-
-        $validator->sometimes('media_data', 'required|string|url', function ($input) {
-            return $input->post_type === 'article' && $input->media_type === 'url';
-        });
-
-        $validator->sometimes('media_data', 'required|string', function ($input) {
-            return $input->post_type === 'article' && $input->media_type === 'iframe';
-        });
-
         $validator->sometimes('featured_images', 'required|array', function ($input) {
             return $input->post_type === 'gallery';
         });
