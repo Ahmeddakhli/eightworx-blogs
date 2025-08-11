@@ -92,7 +92,10 @@ class UpdateBlogAction
             case 'video':
                 if ($media instanceof \Illuminate\Http\UploadedFile) {
                     $blog->clearMediaCollection('Blogs.media_data');
-                    $blog->addMedia($media)->toMediaCollection('Blogs.media_data');
+                $media_url =   $blog->addMedia($media)->toMediaCollection('Blogs.media_data')->getUrl();
+                $blog->media_data = $media_url;
+                $blog->media_type = $mediaType;
+                $blog->save();
                 } else {
                     throw new Exception('Expected an uploaded file for video.');
                 }
@@ -104,6 +107,7 @@ class UpdateBlogAction
                     throw new Exception('Expected a string for URL or iframe.');
                 }
                 $blog->media_data = $media;
+                $blog->media_type = $mediaType;
                 $blog->save();
                 break;
 
