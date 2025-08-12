@@ -153,6 +153,9 @@ class Blog extends Model implements HasMedia
                 ->nonQueued();
             });
 
+        $this->addMediaCollection('Blogs.image')
+            ->useDisk('public')->singleFile();
+
         $this->addMediaCollection('Blogs,media_data')
             ->acceptsFile(function ($file) {
                 return in_array($file->getMimeType(), ['video/mp4', 'video/mov', 'video/avi']);

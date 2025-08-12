@@ -43,8 +43,11 @@ class UpdateBlogAction
         if (isset($data['media_data']) && $data['media_type']) {
             $this->storeMedia($blog, $data['media_data'], $data['media_type']);
         }
+
         // Update blog data (exclude `featured_images` and `media_data` fields)
         $this->updateMedia($blog, $data['og_image'] ?? null, 'Blogs.og_image', $optimizerChain);
+        $this->updateMedia($blog, $data['image'], 'Blogs.image', $optimizerChain);
+
         $updateData = collect($data)->except(['featured_images', 'media_data', 'media_type'])->toArray();
         $blog->update($updateData);
 

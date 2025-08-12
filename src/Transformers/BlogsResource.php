@@ -18,6 +18,7 @@ class BlogsResource extends JsonResource
             'title_en' => $this->title_en,
             'title_ar' => $this->title_ar,
             'default_title' => $this->default_title,
+            'image' => $this->getFirstMediaUrl('Blogs.image'),
             'sub_title_en' => $this->sub_title_en,
             'sub_title_ar' => $this->sub_title_ar,
             'short_description_en' => $this->short_description_en,

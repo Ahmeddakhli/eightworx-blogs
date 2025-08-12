@@ -48,6 +48,7 @@ class StoreBlogsRequest extends FormRequest
             'category_id' => 'required|exists:lookups,id',
             'featured_images' => 'nullable|array',
             'featured_images.*' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
         ];
 
         // Additional rules for post_type = video or article

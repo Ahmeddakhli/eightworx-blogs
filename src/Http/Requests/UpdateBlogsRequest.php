@@ -52,6 +52,7 @@ class UpdateBlogsRequest extends FormRequest
             'category_id' => 'required|exists:lookups,id',
             'featured_images' => 'nullable|array',
             'featured_images.*' => $this->imageOrUrlRule('featured_images'),
+            'image' => $this->imageOrUrlRule('featured_images'),
         ];
 
         //  Conditional rules for media_data based on post_type and media_type

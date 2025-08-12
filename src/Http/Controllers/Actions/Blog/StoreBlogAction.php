@@ -36,6 +36,14 @@ class StoreBlogAction
         if (isset($data['media_data']) && $data['media_type']) {
             $this->storeMedia($blog, $data['media_data'], $data['media_type']);
         }
+        if (isset($data['image'])) {
+            // Add the image to media collection
+            $mediaItem = $blog->addMediaFromRequest('image')->toMediaCollection('Blogs.image');
+
+            // Optimize the image
+            $optimizerChain = OptimizerChainFactory::create();
+            $optimizerChain->optimize($mediaItem->getPath());
+        }
 
         // Refresh the blog to get updated data
         $blog->refresh();
