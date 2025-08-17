@@ -10,8 +10,8 @@ class GetFeaturedBlogsAction
     public function execute()
     {
         // Get featured blog
-        $featuredBlog = Blog::where('is_featured', 1)->with(['category','media'])->get();
-
+        $featuredBlog = Blog::where('is_featured', 1)->with(['category','media'])->limit(5)->get();
+        
         // Not Found!
         if (!$featuredBlog) {
             return null;
