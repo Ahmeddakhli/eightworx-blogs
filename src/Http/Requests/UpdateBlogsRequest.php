@@ -5,8 +5,9 @@ namespace eightworx\Blogs\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
+use App\Http\Requests\BaseRequest;
 
-class UpdateBlogsRequest extends FormRequest
+class UpdateBlogsRequest extends BaseRequest
 {
     protected function prepareForValidation()
     {
@@ -58,7 +59,7 @@ class UpdateBlogsRequest extends FormRequest
         //  Conditional rules for media_data based on post_type and media_type
         if ($this->post_type === 'video') {
             if ($this->media_type === 'video') {
-                $rules['media_data'] = 'required|file|mimetypes:video/mp4,video/x-m4v,video/*';
+                $rules['media_data'] = $this->videoOrUrlRule('media_data');
             } elseif ($this->media_type === 'url') {
                 $rules['media_data'] = 'required|url';
             } elseif ($this->media_type === 'iframe') {

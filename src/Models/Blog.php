@@ -156,10 +156,8 @@ class Blog extends Model implements HasMedia
         $this->addMediaCollection('Blogs.image')
             ->useDisk('public')->singleFile();
 
-        $this->addMediaCollection('Blogs,media_data')
-            ->acceptsFile(function ($file) {
-                return in_array($file->getMimeType(), ['video/mp4', 'video/mov', 'video/avi']);
-            });
+        $this->addMediaCollection('Blogs.media_data')
+            ->useDisk('public')->singleFile();
     }
 
     // Blog Category

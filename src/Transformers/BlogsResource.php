@@ -53,7 +53,7 @@ class BlogsResource extends JsonResource
             'featured_images_303_303' => $this->getFirstMediaUrl('Blogs.featured_images', 'featured_images_303_303'),
             'featured_images_364_849' => $this->getFirstMediaUrl('Blogs.featured_images', 'featured_images_364_849'),
             'media_type' => $this->media_type,
-            'media_data' => $this->media_data,
+            'media_data' => $this->media_type === 'video' ? $this->getFirstMediaUrl('Blogs.media_data') : $this->media_data,
             'created_at' => $this->created_at ? $this->created_at->timezone('Africa/Cairo')->toDateTimeString() : null,
             'updated_at' => $this->updated_at ? $this->updated_at->timezone('Africa/Cairo')->toDateTimeString() : null,
             'created_since' => $this->created_at ? $this->created_at->timezone('Africa/Cairo')->diffForHumans() : null,
