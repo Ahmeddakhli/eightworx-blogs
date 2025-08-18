@@ -38,7 +38,7 @@ class StoreBlogAction
         }
         if (isset($data['image'])) {
             // Add the image to media collection
-            $mediaItem = $blog->addMediaFromRequest('image')->toMediaCollection('Blogs.image');
+            $mediaItem = $blog->addMedia($data['image'])->toMediaCollection('Blogs.image');
 
             // Optimize the image
             $optimizerChain = OptimizerChainFactory::create();

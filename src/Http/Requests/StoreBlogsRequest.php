@@ -50,15 +50,14 @@ class StoreBlogsRequest extends FormRequest
             'featured_images.*' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
         ];
-
         // Additional rules for post_type = video or article
         if ($this->post_type === 'video') {
-            if ($this->media_type === 'file') {
+            if ($this->media_type === 'file' || $this->media_type === 'video') {
                 $rules['media_data'] = 'required|file|mimetypes:video/mp4,video/x-m4v,video/*';
             } elseif ($this->media_type === 'url') {
                 $rules['media_data'] = 'required|url';
             } elseif ($this->media_type === 'iframe') {
-                $rules['media_data'] = 'required|string'; // or more specific iframe regex if needed
+                $rules['media_data'] = 'required|string';
             }
         } elseif ($this->post_type === 'article') {
             $rules['media_data'] = 'required|string';
