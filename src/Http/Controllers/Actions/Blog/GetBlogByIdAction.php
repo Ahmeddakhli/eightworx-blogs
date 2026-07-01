@@ -10,7 +10,7 @@ class GetBlogByIdAction
     public function execute($id)
     {
         // Get the Blog
-        $blog = Blog::with(['category','media'])->find($id);
+        $blog = Blog::with(['category','media','projects'])->find($id);
 
         // Not Found!
         if (!$blog) {

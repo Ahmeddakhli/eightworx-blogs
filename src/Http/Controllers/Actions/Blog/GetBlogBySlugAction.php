@@ -10,7 +10,7 @@ class GetBlogBySlugAction
     public function execute($slug)
     {
         // Get the Blog
-        $blog = Blog::where('slug', $slug)->first();
+        $blog = Blog::with(['category','media','projects'])->where('slug', $slug)->first();
 
         // Not Found!
         if (!$blog) {

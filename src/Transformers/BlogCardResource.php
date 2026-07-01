@@ -49,6 +49,20 @@ class BlogCardResource extends JsonResource
             'og_description_ar' => $this->og_description_ar,
             'og_description_en' => $this->og_description_en,
             'og_image' => $this->getFirstMediaUrl('Blogs.og_image'),
+            'project_ids' => $this->whenLoaded('projects', function () {
+                return $this->projects->pluck('id');
+            }),
+            'projects' => $this->whenLoaded('projects', function () {
+                return $this->projects->map(function ($project) {
+                    return [
+                        'id' => $project->id,
+                        'title_en' => $project->title_en,
+                        'title_ar' => $project->title_ar,
+                        'default_title' => $project->default_title,
+                        'slug' => $project->slug,
+                    ];
+                });
+            }),
             'created_since' => $this->created_at ? $this->created_at->timezone('Africa/Cairo')->diffForHumans() : null,
 
         ];

@@ -48,7 +48,15 @@ class UpdateBlogAction
         // $updateData = collect($data)->except(['featured_images', 'media_data', 'media_type'])->toArray();
         $blog->update($data);
 
+        // Sync related projects if provided
+        if (array_key_exists('project_ids', $data)) {
+            $blog->projects()->sync(is_array($data['project_ids']) ? $data['project_ids'] : []);
+        }
+
         $blog = $blog->refresh();
+
+        // Load related projects so they are included in the response
+        $blog->load('projects');
 
         // Return the Blog resource
         return new BlogsResource($blog);

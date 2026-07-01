@@ -7,6 +7,7 @@ use Spatie\MediaLibrary\HasMedia;
 use ApiPlatform\Metadata\ApiResource;
 
 use Modules\Lookups\Models\Lookup;
+use Modules\Projects\Models\Project;
 use Wildside\Userstamps\Userstamps;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -164,6 +165,13 @@ class Blog extends Model implements HasMedia
     public function category()
     {
         return $this->belongsTo(Lookup::class, 'category_id');
+    }
+
+    // Related Projects
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'blog_project', 'blog_id', 'project_id')
+            ->withTimestamps();
     }
        /**
      * Define the API resource

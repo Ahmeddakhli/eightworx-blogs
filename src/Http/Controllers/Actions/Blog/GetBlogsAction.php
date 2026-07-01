@@ -11,7 +11,7 @@ class GetBlogsAction
     public function execute($request)
     {
         // Search Blogs
-        $blogs = (new Blog)->newQuery()->with(['category','media']);
+        $blogs = (new Blog)->newQuery()->with(['category','media','projects']);
 
         // Search With Key
         if ($request->key) {
@@ -32,6 +32,17 @@ class GetBlogsAction
 
         if ($request->input('is_published') === 'true') {
             $blogs = $blogs->where('is_published', true);
+        }
+
+        // Filter by related project(s)
+        $projectIds = $request->filled('project_ids')
+            ? (array) $request->input('project_ids')
+            : ($request->filled('project_id') ? [$request->input('project_id')] : []);
+
+        if (!empty($projectIds)) {
+            $blogs->whereHas('projects', function ($query) use ($projectIds) {
+                $query->whereIn('projects.id', $projectIds);
+            });
         }
 
         if ($request->has('sort_field')) {

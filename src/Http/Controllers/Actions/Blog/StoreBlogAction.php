@@ -14,6 +14,11 @@ class StoreBlogAction
         // Create Blog
         $blog = Blog::create($data);
 
+        // Sync related projects if provided
+        if (isset($data['project_ids']) && is_array($data['project_ids'])) {
+            $blog->projects()->sync($data['project_ids']);
+        }
+
         // Store the image if provided
         if (isset($data['featured_images']) && is_array($data['featured_images'])) {
             $optimizerChain = OptimizerChainFactory::create(); // Reuse optimizer chain instance
@@ -47,6 +52,9 @@ class StoreBlogAction
 
         // Refresh the blog to get updated data
         $blog->refresh();
+
+        // Load related projects so they are included in the response
+        $blog->load('projects');
 
         // Return Blog Resource
         return new BlogsResource($blog);

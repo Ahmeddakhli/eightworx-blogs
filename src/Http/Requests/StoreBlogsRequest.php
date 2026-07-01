@@ -46,6 +46,8 @@ class StoreBlogsRequest extends FormRequest
             'meta_description_ar' => 'nullable|string|max:500',
             'is_index' => 'nullable|in:0,1',
             'category_id' => 'required|exists:lookups,id',
+            'project_ids' => 'nullable|array',
+            'project_ids.*' => 'integer|exists:projects,id,deleted_at,NULL',
             'featured_images' => 'nullable|array',
             'featured_images.*' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',

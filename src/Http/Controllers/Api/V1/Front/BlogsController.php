@@ -52,6 +52,13 @@ class BlogsController extends Controller
         // Execute the search action to retrieve blogs based on the provided request.
         $blogs = $this->getBlogsAction->execute($request);
 
+        // Featured blogs first, then manual order, then newest.
+        // reorder() clears the model's "order DESC" global scope so is_featured wins as the primary sort.
+        $blogs->reorder()
+            ->orderByDesc('is_featured')
+            ->orderByDesc('order')
+            ->latest();
+
         // use this to return trans object
         $data = DataTables::of($blogs)
             ->addColumn('record', function ($blogs) {

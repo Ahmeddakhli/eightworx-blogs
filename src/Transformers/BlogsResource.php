@@ -45,6 +45,20 @@ class BlogsResource extends JsonResource
             'og_image' => $this->getFirstMediaUrl('Blogs.og_image'),
             'is_index' => $this->is_index,
             'category_id' => optional($this->category)->id,
+            'project_ids' => $this->whenLoaded('projects', function () {
+                return $this->projects->pluck('id');
+            }),
+            'projects' => $this->whenLoaded('projects', function () {
+                return $this->projects->map(function ($project) {
+                    return [
+                        'id' => $project->id,
+                        'title_en' => $project->title_en,
+                        'title_ar' => $project->title_ar,
+                        'default_title' => $project->default_title,
+                        'slug' => $project->slug,
+                    ];
+                });
+            }),
             'featured_images' => $this->getMedia('Blogs.featured_images')->map(function ($media) {
                 return $media->getUrl();
             }),
