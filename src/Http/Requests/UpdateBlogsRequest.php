@@ -14,6 +14,16 @@ class UpdateBlogsRequest extends BaseRequest
         if ($this->filled('slug')) {
             $this->merge(['slug' => Str::slug($this->input('slug'))]);
         }
+        if ($this->has('project_ids')) {
+            $this->merge([
+                'project_ids' => array_values(
+                    array_filter(
+                        (array) $this->project_ids,
+                        fn ($id) => filled($id)
+                    )
+                ),
+            ]);
+        }
     }
 
     /**
