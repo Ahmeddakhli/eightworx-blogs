@@ -1,4 +1,3 @@
-
 <?php
 
 namespace eightworx\Blogs\Http\Controllers\Api\V1\Front;
