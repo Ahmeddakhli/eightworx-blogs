@@ -1,8 +1,10 @@
+
 <?php
 
 namespace eightworx\Blogs\Http\Controllers\Api\V1\Front;
 
 use App\Http\Controllers\Controller;
+use eightworx\Blogs\Models\Blog;
 use Illuminate\Http\Request;
 use eightworx\Blogs\Http\Controllers\Actions\Blog\GetBlogsAction;
 use eightworx\Blogs\Transformers\BlogsResource;
@@ -51,13 +53,6 @@ class BlogsController extends Controller
     {
         // Execute the search action to retrieve blogs based on the provided request.
         $blogs = $this->getBlogsAction->execute($request);
-
-        // Featured blogs first, then manual order, then newest.
-        // reorder() clears the model's "order DESC" global scope so is_featured wins as the primary sort.
-        $blogs->reorder()
-            ->orderByDesc('is_featured')
-            ->orderByDesc('order')
-            ->latest();
 
         // use this to return trans object
         $data = DataTables::of($blogs)
@@ -109,5 +104,31 @@ class BlogsController extends Controller
 
         // Response
         return $this->successResponse(null, $featuredBlogs);
+    }
+
+    /**
+     * Featured Blogs (slider) — optional category_slug, e.g. blog-categories-orientations
+     */
+    public function featured(Request $request)
+    {
+        $blogs = Blog::published()->featured()
+            ->when($request->category_slug, fn ($query, $slug) => $query->whereHas('category', fn ($q) => $q->where('slug', $slug)))
+            ->with('media')
+            ->reorder()->latest()
+            ->offset((int) $request->start)
+            ->limit($request->length ?? 20)
+            ->get()
+            ->map(fn (Blog $blog) => [
+                'id' => $blog->id,
+                'image' => $blog->getFirstMediaUrl('Blogs.image'),
+                'published_at' => $blog->published_at?->timezone('Africa/Cairo')->toDateTimeString(),
+                'title_ar' => $blog->title_ar,
+                'title_en' => $blog->title_en,
+                'short_description_ar' => $blog->short_description_ar,
+                'short_description_en' => $blog->short_description_en,
+            ]);
+
+        // Response
+        return $this->successResponse(null, $blogs);
     }
 }
