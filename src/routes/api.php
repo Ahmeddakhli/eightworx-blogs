@@ -29,6 +29,7 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::get('show', [FrontBlogsController::class, 'show']);
                 Route::post('paginated-blogs', [FrontBlogsController::class, 'paginatedBlogs'])->middleware('limitedLength:50');
                 Route::get('featured-blogs', [FrontBlogsController::class, 'featuredBlogs']);
+                Route::post('featured-slider', [FrontBlogsController::class, 'featured'])->middleware('limitedLength:50');
 
             });
         });
